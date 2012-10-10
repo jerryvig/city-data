@@ -39,4 +39,8 @@ public class CityDataRecord {
 	public String getCountyName() {
 		return countyName;
 	}
+	
+	public int getPopulation() {
+		return population2010;
+	}
 }
