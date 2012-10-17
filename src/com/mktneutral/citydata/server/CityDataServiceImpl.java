@@ -26,9 +26,7 @@ public class CityDataServiceImpl extends RemoteServiceServlet implements CityDat
 			Statement statement = connection.createStatement();
 		
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM city_data_records");
-		
-			
-			
+
 			while ( resultSet.next() ) {
 				CityDataRecord record = new CityDataRecord();
 				record.setCityName( resultSet.getString(1) );
@@ -45,16 +43,6 @@ public class CityDataServiceImpl extends RemoteServiceServlet implements CityDat
 		} catch ( SQLException sqle ) {
 			sqle.printStackTrace();
 		}
-		
-		/* CityDataRecord[] records = new CityDataRecord[10];
-		//mock set of CityDataRecords
-		for ( int i=0; i<10; i++ ) {
-			CityDataRecord record = new CityDataRecord();
-			record.setCityName("Albuquerque");
-			record.setCountyName("Bernalillo");
-			record.setMaleCount( 20 );
-			records[i] = record;
-		} */
 		
 		CityDataRecord[] returnRecords = new CityDataRecord[1];	
 		return records.toArray(returnRecords);
