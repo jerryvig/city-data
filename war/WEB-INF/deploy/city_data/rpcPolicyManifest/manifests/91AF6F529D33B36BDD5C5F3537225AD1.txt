@@ -1,0 +1,2 @@
+serviceClass: com.mktneutral.citydata.client.CityDataService
+path: 49CDBFA23819957EC25B0B5BDB0A18AC.gwt.rpc

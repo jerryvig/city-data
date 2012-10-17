@@ -1,2 +1,3 @@
 # Module city_data
 # RPC service class, partial path of RPC policy file
+com.mktneutral.citydata.client.CityDataService, 49CDBFA23819957EC25B0B5BDB0A18AC.gwt.rpc

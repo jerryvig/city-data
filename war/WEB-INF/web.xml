@@ -16,6 +16,16 @@
     <url-pattern>/cityDataServlet</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+  	<servlet-name>cityDataRecords</servlet-name>
+    <servlet-class>com.mktneutral.citydata.server.CityDataServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>cityDataRecords</servlet-name>
+    <url-pattern>/city_data/cityDataRecords</url-pattern>
+  </servlet-mapping>
+  
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>City_data.html</welcome-file>

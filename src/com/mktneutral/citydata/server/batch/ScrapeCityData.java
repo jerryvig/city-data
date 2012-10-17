@@ -7,12 +7,16 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.net.URL;
 
 public class ScrapeCityData {
 	private static BufferedReader reader = null;
 	private static BufferedWriter writer = null;
-	private static ArrayList<String> urlList = new ArrayList<String>();
 	private static ArrayList<Thread> threadList = new ArrayList<Thread>();
 	
 	public static void main(String[] args) {
@@ -22,18 +26,15 @@ public class ScrapeCityData {
 			reader = new BufferedReader(new FileReader("CityDataList.txt"));
 			writer = new BufferedWriter(new FileWriter("CityDataRecords.csv"));
 
-			String nextLine;
-			while ((nextLine = reader.readLine()) != null) {
-				urlList.add(NameToUrl(nextLine.trim()));
-			}
-
 			try {
 				writer.write("\"City Name\",\"Population\",\"Males\",\"Females\",\"Population Change\",\"Median Resident Age\",\"Median Household Income\",\"Per Capita Income\",\"Median Household Value\",\"Median Rent\",\"White Alone\",\"Hispanic\",\"Black\",\"Asian\",\"American Indian\",\"Native Hawaiian\",\"Cost of Living Index\",\"High School\",\"Bachelors Degree\",\"Graduate Degree\",\"Never Married\",\"Now Married\",\"Separated\",\"Widowed\",\"Divorced\",\"Population Density\",\"Land Area\",\"Elevation\",\"Homicide Rate\"\n");
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}
 
-			for (int i = 0; i < urlList.size(); i++) {
+			String nextLine;
+			int i = 0;
+			while ((nextLine = reader.readLine()) != null) {
 				try {
 					if ( i > 0 )
 						Thread.sleep(400);
@@ -41,8 +42,9 @@ public class ScrapeCityData {
 					ie.printStackTrace();
 				} 
 				
-				System.out.println(urlList.get(i));
-				URL url = new URL(urlList.get(i));
+				String urlString = NameToUrl(nextLine.trim());
+				System.out.println(urlString);
+				URL url = new URL(urlString);
 
 				BufferedReader respReader = new BufferedReader(
 						new InputStreamReader(url.openStream()));
@@ -53,15 +55,18 @@ public class ScrapeCityData {
 				}
 				respReader.close();
 
-				String cityName = getCityName(urlList.get(i));
+				String cityName = getCityName(urlString);
 				System.out.println( cityName );
 				
-				
+				//non-blocking code
 				Thread responseThread = new Thread(new ResponseParser(resp, cityName));
 				responseThread.start();
 				threadList.add( responseThread );
+				
+				i++;
 			}
 			
+			//blocking here
 			for ( Thread thread : threadList ) {
 				try {
 					thread.join();
@@ -122,17 +127,11 @@ public class ScrapeCityData {
 			String elevation = "";
 			String landArea = "";
 			String homicideRate = "";
-			
-			try {
-				int maleIdx = resp.indexOf("Males:");
-				String nextString = resp.substring(maleIdx, maleIdx + 25);
-				int nbIdx = nextString.indexOf("&nb");
-				int bIdx = nextString.indexOf("b> ");
-				maleCount = nextString.substring(bIdx + 3, nbIdx);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 
+			ExecutorService execService = Executors.newFixedThreadPool(2);
+			
+			Future<String> maleCountFuture = execService.submit( new MaleCountFinder(resp) );
+			
 			try {
 				int femaleIdx = resp.indexOf("Females:");
 
@@ -467,7 +466,17 @@ public class ScrapeCityData {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
+			
+			execService.shutdown();
+			try {
+				maleCount = maleCountFuture.get();
+			} catch ( ExecutionException ee ) {
+				ee.printStackTrace();
+			} 
+			catch (InterruptedException ie) {
+				ie.printStackTrace();
+			}
+			 
 			System.out.println("Population 2010 = " + population2010 + "; Males = "
 					+ maleCount + "; Females = " + femaleCount + "; PopChg = "
 					+ populationChg + "; median age = " + medianAge
@@ -510,6 +519,28 @@ public class ScrapeCityData {
 		}
 	}
 
+	private static class MaleCountFinder implements Callable<String> {
+		private String resp = "";
+		
+		public MaleCountFinder( String resp ) {
+			this.resp = resp;
+		}
+		
+		public String call() {
+			try {
+				int maleIdx = resp.indexOf("Males:");
+				String nextString = resp.substring(maleIdx, maleIdx + 25);
+				int nbIdx = nextString.indexOf("&nb");
+				int bIdx = nextString.indexOf("b> ");
+				String maleCount = nextString.substring(bIdx + 3, nbIdx);
+				return maleCount;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "0";
+			}
+		}
+	}
+	
 	public static String getCityName(String url) {
 		String[] pieces = url.split("/");
 		String last = pieces[pieces.length - 1];
