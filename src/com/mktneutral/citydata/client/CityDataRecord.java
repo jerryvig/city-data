@@ -60,4 +60,16 @@ public class CityDataRecord implements Serializable {
 	public void setCountyName( String countyName ) {
 		this.countyName = countyName;
 	}
+	
+	public void setMaleCount( int maleCount ) {
+		this.maleCount = maleCount;
+	}
+	
+	public void setFemaleCount( int femaleCount ) {
+		this.femaleCount = femaleCount;
+	}
+	
+	public void setPopulation2010( int population2010 ) {
+		this.population2010 = population2010;
+	}
 }

@@ -27,7 +27,7 @@ public class ScrapeCityData {
 			writer = new BufferedWriter(new FileWriter("CityDataRecords.csv"));
 
 			try {
-				writer.write("\"City Name\",\"Population\",\"Males\",\"Females\",\"Population Change\",\"Median Resident Age\",\"Median Household Income\",\"Per Capita Income\",\"Median Household Value\",\"Median Rent\",\"White Alone\",\"Hispanic\",\"Black\",\"Asian\",\"American Indian\",\"Native Hawaiian\",\"Cost of Living Index\",\"High School\",\"Bachelors Degree\",\"Graduate Degree\",\"Never Married\",\"Now Married\",\"Separated\",\"Widowed\",\"Divorced\",\"Population Density\",\"Land Area\",\"Elevation\",\"Homicide Rate\"\n");
+				writer.write("\"City Name\",\"Population\",\"Males\",\"Females\",\"Population Change\",\"Median Resident Age\",\"Median Household Income\",\"Per Capita Income\",\"Median Household Value\",\"Median Rent\",\"White Alone\",\"Hispanic\",\"Black\",\"Asian\",\"American Indian\",\"Native Hawaiian\",\"Cost of Living Index\",\"High School\",\"Bachelors Degree\",\"Graduate Degree\",\"Never Married\",\"Now Married\",\"Separated\",\"Widowed\",\"Divorced\",\"Population Density\",\"Land Area\",\"Elevation\",\"Homicide Rate\",\"County Name\"\n");
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
 			}
@@ -511,7 +511,7 @@ public class ScrapeCityData {
 							+ "\",\"" + nowMarried + "\",\"" + separated + "\",\""
 							+ widowed + "\",\"" + divorced + "\",\"" + popDensity
 							+ "\",\"" + landArea + "\",\"" + elevation + "\",\""
-							+ homicideRate + "\"\n");
+							+ homicideRate + "\",\"" + countyName + "\"\n");
 				}
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
