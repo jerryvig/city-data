@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -17,32 +18,32 @@ public class WWF {
 	private static int lastDealtIndex = 0;
 	
 	public static void setAlphabet() {
-		alphabet.put("a",new Letter("A",9,1));				
-		alphabet.put("b",new Letter("B",2,4));
-		alphabet.put("c",new Letter("C",2,4));
-		alphabet.put("d",new Letter("D",5,2));
-		alphabet.put("e",new Letter("E",13,1));
-		alphabet.put("f",new Letter("F",2,4));
-		alphabet.put("g",new Letter("G",3,3));
-		alphabet.put("h",new Letter("H",4,3));
-		alphabet.put("i",new Letter("I",8,1));
-		alphabet.put("j",new Letter("J",1,10));
-		alphabet.put("k",new Letter("K",1,5));
-		alphabet.put("l",new Letter("L",4,2));
-		alphabet.put("m",new Letter("M",2,4));
-		alphabet.put("n",new Letter("N",5,2));
-		alphabet.put("o",new Letter("O",8,1));
-		alphabet.put("p",new Letter("P",2,4));
-		alphabet.put("q",new Letter("Q",1,10));
-		alphabet.put("r",new Letter("R",6,1));
-		alphabet.put("s",new Letter("S",5,1));
-		alphabet.put("t",new Letter("T",7,1));
-		alphabet.put("u",new Letter("U",4,2));
-		alphabet.put("v",new Letter("V",2,5));
-		alphabet.put("w",new Letter("W",2,4));
-		alphabet.put("x",new Letter("X",1,8));
-		alphabet.put("y",new Letter("Y",2,3));
-		alphabet.put("z",new Letter("Z",1,10));
+		alphabet.put("a",new Letter("a",9,1));				
+		alphabet.put("b",new Letter("b",2,4));
+		alphabet.put("c",new Letter("c",2,4));
+		alphabet.put("d",new Letter("d",5,2));
+		alphabet.put("e",new Letter("e",13,1));
+		alphabet.put("f",new Letter("f",2,4));
+		alphabet.put("g",new Letter("g",3,3));
+		alphabet.put("h",new Letter("h",4,3));
+		alphabet.put("i",new Letter("i",8,1));
+		alphabet.put("j",new Letter("j",1,10));
+		alphabet.put("k",new Letter("k",1,5));
+		alphabet.put("l",new Letter("l",4,2));
+		alphabet.put("m",new Letter("m",2,4));
+		alphabet.put("n",new Letter("n",5,2));
+		alphabet.put("o",new Letter("o",8,1));
+		alphabet.put("p",new Letter("p",2,4));
+		alphabet.put("q",new Letter("q",1,10));
+		alphabet.put("r",new Letter("r",6,1));
+		alphabet.put("s",new Letter("s",5,1));
+		alphabet.put("t",new Letter("t",7,1));
+		alphabet.put("u",new Letter("u",4,2));
+		alphabet.put("v",new Letter("v",2,5));
+		alphabet.put("w",new Letter("w",2,4));
+		alphabet.put("x",new Letter("x",1,8));
+		alphabet.put("y",new Letter("y",2,3));
+		alphabet.put("z",new Letter("z",1,10));
 		alphabet.put("",new Letter("",2,0));
 	}
 	
@@ -111,7 +112,7 @@ public class WWF {
 		
 		shuffleLetterDeck();
 		
-		printLetterDeck();
+		// printLetterDeck();
 		
 		try {
 			loadDictionary();
@@ -124,7 +125,8 @@ public class WWF {
 		
 		Player p1 = new Player("Tess");
 		p1.dealLetters();
-		// p1.printLetters();
+		p1.printLetters();
+		p1.findBestWord();
 		
 		Player p2 = new Player("Fluvia");
 		p2.dealLetters();
@@ -132,7 +134,7 @@ public class WWF {
 	}
 	
 	static private class Player {
-		private String[] dealtLetters = new String[7];
+		private Vector<String> dealtLetters = new Vector<String>();
 		private int score = 0;
 		private String name = "";
 		
@@ -142,22 +144,52 @@ public class WWF {
 		
 		public void dealLetters() {
 			for ( int i=0; i<7; i++ ) {
-				if ( dealtLetters[i] == null ) {
-					dealtLetters[i] = letterDeck.get(lastDealtIndex);
-					lastDealtIndex++;
-				}
+				dealtLetters.add( letterDeck.get(lastDealtIndex) );
+				lastDealtIndex++;
 			}
 		}
 		
 		public void printLetters() {
-			for ( String letter : dealtLetters) 
+			for ( String letter : dealtLetters ) 
 				System.out.println( letter );
 		}
 		
 		public void findBestWord() {
-			
+
 			for ( Word word : dictionary ) {
 				
+				String wordString = word.getWordString();
+				// System.out.println( "checking " + wordString );
+				
+				Vector<String> dealtCopy = (Vector<String>) dealtLetters.clone();
+				Vector<Boolean> lettersFound = new Vector<Boolean>();
+				
+				for ( int i=0; i<wordString.length(); i++ ) {	
+					String letter = wordString.substring(i,i+1);
+					lettersFound.add( new Boolean(false) );
+					
+					//System.out.println( "next Letter = " + letter );
+					
+					for ( int j=0; j<dealtCopy.size(); j++ ) {
+						//System.out.println( "dealt copy = " + dealtCopy.get(j) );
+						if ( dealtCopy.get(j).equals(letter) ) {
+							// System.out.println( "we have equality" );
+							
+							dealtCopy.remove(j);
+							lettersFound.set(lettersFound.size()-1, new Boolean(true));
+						}
+					}
+				}
+				
+				boolean foundIt = true;
+				for ( Boolean letterFound : lettersFound ) {
+					foundIt = foundIt && letterFound.booleanValue();
+				}
+				
+				if ( foundIt ) {
+					System.out.println( wordString + ", found it" );
+					return;
+				}
 			}
 		}
 	}
