@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class WWF {
-	private static final ArrayList<String> letterDeck = new ArrayList<String>();
+	private static final ArrayList<Letter> letterDeck = new ArrayList<Letter>();
 	private static final HashMap<String,Letter> alphabet = new HashMap<String,Letter>();
 	private static final ArrayList<Word> dictionary = new ArrayList<Word>();
 	
@@ -47,13 +47,23 @@ public class WWF {
 		alphabet.put("",new Letter("",2,0));
 	}
 	
+	public static void printAlphabet() {
+		Iterator iter = alphabet.entrySet().iterator();
+		
+		while ( iter.hasNext() ) {
+			Map.Entry pair = (Map.Entry) iter.next();
+			Letter letter = (Letter) pair.getValue();
+			System.out.println( letter.getLetter() + ", " + letter.getFrequency() + ", " + letter.getScoreValue() );
+		}
+	}
+	
 	public static void fillLetterDeck() {
 		Iterator iter = alphabet.entrySet().iterator();
 		
 		while ( iter.hasNext() ) {
 			Map.Entry pair = (Map.Entry) iter.next();
 			Letter letter = (Letter) pair.getValue();
-			letterDeck.add( letter.getLetter() );
+			letterDeck.add( letter );
 		}
 	}
 	
@@ -62,8 +72,8 @@ public class WWF {
 	}
 	
 	public static void printLetterDeck() {
-		for ( String letter : letterDeck ) {
-			System.out.println( letter );
+		for ( Letter letter : letterDeck ) {
+			System.out.println( letter.getLetter() );
 		}
 	}
 	
@@ -92,7 +102,6 @@ public class WWF {
 			Letter letter = alphabet.get( word.substring(i,i+1) );
 			wordScore += letter.getScoreValue();
 		}
-		
 		return wordScore;
 	}
 	
@@ -134,35 +143,40 @@ public class WWF {
 	}
 	
 	static private class Player {
-		private Vector<String> dealtLetters = new Vector<String>();
+		private ArrayList<Letter> dealtLetters = new ArrayList<Letter>();
+		private static final int LETTER_COUNT = 7;
 		private int score = 0;
-		private String name = "";
+		private String name;
 		
 		public Player( String name ) {
 			this.name = name;
 		}
 		
 		public void dealLetters() {
-			for ( int i=0; i<7; i++ ) {
+			for ( int i=0; i<LETTER_COUNT; i++ ) {
 				dealtLetters.add( letterDeck.get(lastDealtIndex) );
 				lastDealtIndex++;
 			}
 		}
 		
 		public void printLetters() {
-			for ( String letter : dealtLetters ) 
-				System.out.println( letter );
+			for ( Letter letter : dealtLetters ) 
+				System.out.println( letter.getLetter() );
 		}
 		
 		public void findBestWord() {
-
+			//algorithm to find the best acceptable word in the dictionary from a given dealt letter hand.
 			for ( Word word : dictionary ) {
 				
 				String wordString = word.getWordString();
 				// System.out.println( "checking " + wordString );
 				
-				Vector<String> dealtCopy = (Vector<String>) dealtLetters.clone();
-				Vector<Boolean> lettersFound = new Vector<Boolean>();
+				ArrayList<Letter> dealtCopy = (ArrayList<Letter>) dealtLetters.clone();
+				ArrayList<Boolean> lettersFound = new ArrayList<Boolean>();
+				
+				if ( wordString.length() > LETTER_COUNT ) {
+					continue;
+				}
 				
 				for ( int i=0; i<wordString.length(); i++ ) {	
 					String letter = wordString.substring(i,i+1);
@@ -172,7 +186,8 @@ public class WWF {
 					
 					for ( int j=0; j<dealtCopy.size(); j++ ) {
 						//System.out.println( "dealt copy = " + dealtCopy.get(j) );
-						if ( dealtCopy.get(j).equals(letter) ) {
+						Letter dealtLetter = (Letter) dealtCopy.get(j);
+						if ( dealtLetter.getLetter().equals(letter) ) {
 							// System.out.println( "we have equality" );
 							
 							dealtCopy.remove(j);
@@ -187,7 +202,7 @@ public class WWF {
 				}
 				
 				if ( foundIt ) {
-					System.out.println( wordString + ", found it" );
+					System.out.println( wordString + ", found it, score = " + word.getWordScore() );
 					return;
 				}
 			}
@@ -237,6 +252,7 @@ public class WWF {
 		
 		@Override
 		public int compareTo(Word word) {
+			//compareTo method for Word to enable sorting of the words by their scores.
 			if ( this.getWordScore() > word.getWordScore() ) {
 				return 1;
 			} 
