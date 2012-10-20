@@ -1,12 +1,15 @@
 package com.mktneutral.citydata.server.batch;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.Vector;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -78,12 +81,21 @@ public class WWF {
 	}
 	
 	public static void loadDictionary() throws IOException {
-		BufferedReader reader = new BufferedReader( new FileReader("enable1.txt") );
+		Path path = Paths.get("enable1.txt");
 		
-		String line = "";
+		if ( !Files.exists(path, new LinkOption[]{LinkOption.NOFOLLOW_LINKS}) ) {
+			throw new IOException("Failed to find dictionary file");
+		}
+		
+		if ( !Files.isReadable(path) ) {
+			throw new IOException("Dictionary file is not readable");
+		}
+		
+		//JDK 7 BufferedReader pattern to replace use of new BufferedReader()
+		BufferedReader reader = Files.newBufferedReader(path, Charset.forName("UTF-8"));
+		String line;
 		while ( (line = reader.readLine()) != null ) {
-			int wordScore = scoreWord(line.trim()); 
-			dictionary.add( new Word( line.trim(), wordScore ) );
+			dictionary.add( new Word( line.trim() ) );
 		}
 		
 		reader.close();
@@ -93,16 +105,6 @@ public class WWF {
 		//Code here to sort the dictionary in descending order by the score of the words.
 		Collections.sort( dictionary );
 		Collections.reverse( dictionary );
-	}
-	
-	public static int scoreWord( String word ) {
-		//implement word scoring scheme
-		int wordScore = 0;
-		for ( int i=0; i<word.length(); i++ ) {
-			Letter letter = alphabet.get( word.substring(i,i+1) );
-			wordScore += letter.getScoreValue();
-		}
-		return wordScore;
 	}
 	
 	public static void printDictionary() {
@@ -115,6 +117,8 @@ public class WWF {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		long startTime = System.currentTimeMillis();
+	
 		setAlphabet();
 		
 		fillLetterDeck();
@@ -127,18 +131,23 @@ public class WWF {
 			loadDictionary();
 		} catch ( IOException ioe ) {
 			ioe.printStackTrace();
+			System.exit(0);
 		}
 		
 		sortDictionary();
 		// printDictionary();
 		
-		Player p1 = new Player("Tess");
+		Player p1 = new Player("TessMunster");
 		p1.dealLetters();
 		p1.printLetters();
-		p1.findBestWord();
+		//p1.findBestWordI();
+		p1.getCombinations();
 		
-		Player p2 = new Player("Fluvia");
-		p2.dealLetters();
+		long endTime = System.currentTimeMillis();
+		System.out.println( "Time = " + Long.toString(endTime-startTime) + " ms" );
+		
+		// Player p2 = new Player("Fluvia");
+		// p2.dealLetters();
 		// p2.printLetters();
 	}
 	
@@ -152,11 +161,21 @@ public class WWF {
 			this.name = name;
 		}
 		
+		public String getName() {
+			return this.name;
+		}
+		
+		public int getScore() {
+			return this.score;
+		}
+		
 		public void dealLetters() {
 			for ( int i=0; i<LETTER_COUNT; i++ ) {
 				dealtLetters.add( letterDeck.get(lastDealtIndex) );
 				lastDealtIndex++;
 			}
+			
+			Collections.sort(dealtLetters);
 		}
 		
 		public void printLetters() {
@@ -164,7 +183,103 @@ public class WWF {
 				System.out.println( letter.getLetter() );
 		}
 		
-		public void findBestWord() {
+		public void getCombinations() {
+			//This can work for seven letters in the dealtLetters hand.
+			ArrayList<Word> combinations = new ArrayList<Word>();
+			
+			//One
+			for ( int i=0; i<dealtLetters.size(); i++ ) {
+				combinations.add( new Word( dealtLetters.get(i).getLetter() ) );
+			}
+			
+			//Two
+			for ( int i=0; i<dealtLetters.size(); i++ ) {
+				for ( int j=i+1; j<dealtLetters.size(); j++ ) {
+					combinations.add( new Word( dealtLetters.get(i).getLetter() + dealtLetters.get(j).getLetter() ) );
+				}
+			}
+			
+			//Three
+			for ( int i=0; i<dealtLetters.size(); i++ ) {
+				for ( int j=i+1; j<dealtLetters.size(); j++ ) {
+					for ( int k=j+1; k<dealtLetters.size(); k++ ) {
+						combinations.add( new Word( dealtLetters.get(i).getLetter() 
+								+ dealtLetters.get(j).getLetter() 
+								+ dealtLetters.get(k).getLetter() ) );
+					}
+				}
+			}
+			
+			//Four
+			for ( int i=0; i<dealtLetters.size(); i++ ) {
+				for ( int j=i+1; j<dealtLetters.size(); j++ ) {
+					for ( int k=j+1; k<dealtLetters.size(); k++ ) {
+						for ( int l=k+1; l<dealtLetters.size(); l++ ) {
+							combinations.add( new Word( dealtLetters.get(i).getLetter() 
+									+ dealtLetters.get(j).getLetter() 
+									+ dealtLetters.get(k).getLetter() 
+									+ dealtLetters.get(l).getLetter() ) );
+						}
+					}
+				}
+			}
+			
+			//Five I got five on it
+			for ( int i=0; i<dealtLetters.size(); i++ ) {
+				for ( int j=i+1; j<dealtLetters.size(); j++ ) {
+					for ( int k=j+1; k<dealtLetters.size(); k++ ) {
+						for ( int l=k+1; l<dealtLetters.size(); l++ ) {
+							for ( int m=l+1; m<dealtLetters.size(); m++ ) {
+								combinations.add( new Word( dealtLetters.get(i).getLetter() 
+									+ dealtLetters.get(j).getLetter() 
+									+ dealtLetters.get(k).getLetter() 
+									+ dealtLetters.get(l).getLetter() 
+									+ dealtLetters.get(m).getLetter() ) );
+							}
+						}
+					}
+				}
+			}
+			
+			//Six
+			for ( int i=0; i<dealtLetters.size(); i++ ) {
+				for ( int j=i+1; j<dealtLetters.size(); j++ ) {
+					for ( int k=j+1; k<dealtLetters.size(); k++ ) {
+						for ( int l=k+1; l<dealtLetters.size(); l++ ) {
+							for ( int m=l+1; m<dealtLetters.size(); m++ ) {
+								for ( int n=m+1; n<dealtLetters.size(); n++ ) {
+									combinations.add( new Word( dealtLetters.get(i).getLetter() 
+											+ dealtLetters.get(j).getLetter() 
+											+ dealtLetters.get(k).getLetter() 
+											+ dealtLetters.get(l).getLetter() 
+											+ dealtLetters.get(m).getLetter()
+											+ dealtLetters.get(n).getLetter() ) );
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			//Seven 
+			combinations.add( new Word( dealtLetters.get(0).getLetter() 
+					+ dealtLetters.get(1).getLetter() 
+					+ dealtLetters.get(2).getLetter() 
+					+ dealtLetters.get(3).getLetter() 
+					+ dealtLetters.get(4).getLetter()
+					+ dealtLetters.get(5).getLetter()
+					+ dealtLetters.get(6).getLetter() ) );
+			
+			System.out.println( "----------Comobos Here-----------" );
+			for ( Word combo : combinations ) {
+				System.out.println( combo.getWordString() );
+			}
+			
+			System.out.println( "Combinations size = " + combinations.size() );
+			
+		}
+		
+		public void findBestWordI() {
 			//algorithm to find the best acceptable word in the dictionary from a given dealt letter hand.
 			for ( Word word : dictionary ) {
 				
@@ -209,7 +324,7 @@ public class WWF {
 		}
 	}
 	
-	static private class Letter {
+	static private class Letter implements Comparable<Letter> {
 		private String letter;
 		private int frequency;
 		private int scoreValue;
@@ -231,15 +346,20 @@ public class WWF {
 		public int getScoreValue() {
 			return this.scoreValue;
 		}
+		
+		@Override
+		public int compareTo(Letter letter) {
+			return this.getLetter().compareTo( letter.getLetter() );
+		}
 	}
 	
 	static private class Word implements Comparable<Word> {
 		private String word;
 		private int wordScore;
 		
-		public Word( String word, int wordScore ) {
+		public Word( String word ) {
 			this.word = word;
-			this.wordScore = wordScore;
+			this.scoreWord();
 		}
 
 		public String getWordString() {
@@ -248,6 +368,15 @@ public class WWF {
 		
 		public int getWordScore() {
 			return this.wordScore;
+		}
+		
+		public void scoreWord() {
+			//implement word scoring scheme
+			this.wordScore = 0;
+			for ( int i=0; i<word.length(); i++ ) {
+				Letter letter = alphabet.get( word.substring(i,i+1) );
+				this.wordScore += letter.getScoreValue();
+			}
 		}
 		
 		@Override
