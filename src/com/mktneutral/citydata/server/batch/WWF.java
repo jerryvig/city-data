@@ -137,11 +137,15 @@ public class WWF {
 		sortDictionary();
 		// printDictionary();
 		
-		Player p1 = new Player("TessMunster");
-		p1.dealLetters();
-		p1.printLetters();
+		for ( Word word : dictionary ) {
+			word.sortLetters();
+		}
+		
+		//Player p1 = new Player("TessMunster");
+		//p1.dealLetters();
+		//p1.printLetters();
 		//p1.findBestWordI();
-		p1.getCombinations();
+		//p1.getCombinations();
 		
 		long endTime = System.currentTimeMillis();
 		System.out.println( "Time = " + Long.toString(endTime-startTime) + " ms" );
@@ -270,6 +274,9 @@ public class WWF {
 					+ dealtLetters.get(5).getLetter()
 					+ dealtLetters.get(6).getLetter() ) );
 			
+			Collections.sort( combinations );
+			Collections.reverse( combinations );
+			
 			System.out.println( "----------Comobos Here-----------" );
 			for ( Word combo : combinations ) {
 				System.out.println( combo.getWordString() );
@@ -376,6 +383,24 @@ public class WWF {
 			for ( int i=0; i<word.length(); i++ ) {
 				Letter letter = alphabet.get( word.substring(i,i+1) );
 				this.wordScore += letter.getScoreValue();
+			}
+		}
+		
+		public void sortLetters() {
+			/*
+			 * need to rewrite here to make it work.
+			*/
+			char[] characters = this.word.toCharArray();
+			ArrayList<String> sortedLetters = new ArrayList<String>();
+			
+			for ( char character : characters ) {
+				sortedLetters.add( new String(new StringBuilder(character)) );
+			}
+			
+			Collections.sort( sortedLetters );
+			
+			for ( String letter : sortedLetters ) {
+				System.out.println( letter );
 			}
 		}
 		
