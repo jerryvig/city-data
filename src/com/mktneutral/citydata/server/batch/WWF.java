@@ -245,24 +245,15 @@ public class WWF {
 				}
 			}
 			
-			//Six
+			//Six 
 			for ( int i=0; i<dealtLetters.size(); i++ ) {
-				for ( int j=i+1; j<dealtLetters.size(); j++ ) {
-					for ( int k=j+1; k<dealtLetters.size(); k++ ) {
-						for ( int l=k+1; l<dealtLetters.size(); l++ ) {
-							for ( int m=l+1; m<dealtLetters.size(); m++ ) {
-								for ( int n=m+1; n<dealtLetters.size(); n++ ) {
-									combinations.add( new Word( dealtLetters.get(i).getLetter() 
-											+ dealtLetters.get(j).getLetter() 
-											+ dealtLetters.get(k).getLetter() 
-											+ dealtLetters.get(l).getLetter() 
-											+ dealtLetters.get(m).getLetter()
-											+ dealtLetters.get(n).getLetter() ) );
-								}
-							}
-						}
+				String newWordString = "";
+				for ( int j=0; j<dealtLetters.size(); j++ ) {
+					if ( i != j ) {
+						newWordString.concat( dealtLetters.get(j).getLetter() );
 					}
 				}
+				combinations.add( new Word( newWordString ) );
 			}
 			
 			//Seven 
