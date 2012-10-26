@@ -47,7 +47,7 @@ public class WWF {
 		alphabet.put("x",new Letter("x",1,8));
 		alphabet.put("y",new Letter("y",2,3));
 		alphabet.put("z",new Letter("z",1,10));
-		alphabet.put("",new Letter("",2,0));
+		alphabet.put("_",new Letter("",2,0));
 	}
 	
 	public static void printAlphabet() {
@@ -66,7 +66,10 @@ public class WWF {
 		while ( iter.hasNext() ) {
 			Map.Entry pair = (Map.Entry) iter.next();
 			Letter letter = (Letter) pair.getValue();
-			letterDeck.add( letter );
+			
+			for ( int i=0; i<letter.getFrequency(); i++ ) {
+				letterDeck.add( letter );
+			}
 		}
 	}
 	
@@ -78,6 +81,8 @@ public class WWF {
 		for ( Letter letter : letterDeck ) {
 			System.out.println( letter.getLetter() );
 		}
+		
+		System.out.println( "Letter Deck size = " + letterDeck.size() );
 	}
 	
 	public static void loadDictionary() throws IOException {
@@ -144,8 +149,8 @@ public class WWF {
 		Player p1 = new Player("TessMunster", letterDeck, alphabet, dictionary );
 		p1.dealLetters(lastDealtIndex);
 		p1.printLetters();
-		p1.findBestWordI();
-		//p1.getCombinations();
+		//p1.findBestWordI();
+		p1.generateCombinations();
 		
 		long endTime = System.currentTimeMillis();
 		System.out.println( "Time = " + Long.toString(endTime-startTime) + " ms" );

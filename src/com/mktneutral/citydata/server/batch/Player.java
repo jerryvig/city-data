@@ -9,6 +9,7 @@ public class Player {
 	private ArrayList<Letter> letterDeck;
 	private HashMap<String,Letter> alphabet;
 	private ArrayList<Word> dictionary;
+	private ArrayList<Word> combinations = new ArrayList<Word>();
 	
 	private static final int LETTER_COUNT = 7;
 	private int score = 0;
@@ -43,10 +44,8 @@ public class Player {
 			System.out.println( letter.getLetter() );
 	}
 	
-	public void getCombinations() {
+	public void generateCombinations() {
 		//This can work for seven letters in the dealtLetters hand.
-		ArrayList<Word> combinations = new ArrayList<Word>();
-		
 		//One
 		for ( int i=0; i<dealtLetters.size(); i++ ) {
 			combinations.add( new Word( dealtLetters.get(i).getLetter(), alphabet ) );
@@ -84,30 +83,13 @@ public class Player {
 			}
 		}
 		
-		//Five I got five on it
-		/* for ( int i=0; i<dealtLetters.size(); i++ ) {
-			for ( int j=i+1; j<dealtLetters.size(); j++ ) {
-				for ( int k=j+1; k<dealtLetters.size(); k++ ) {
-					for ( int l=k+1; l<dealtLetters.size(); l++ ) {
-						for ( int m=l+1; m<dealtLetters.size(); m++ ) {
-							combinations.add( new Word( dealtLetters.get(i).getLetter() 
-								+ dealtLetters.get(j).getLetter() 
-								+ dealtLetters.get(k).getLetter() 
-								+ dealtLetters.get(l).getLetter() 
-								+ dealtLetters.get(m).getLetter(), alphabet ) );
-						}
-					}
-				}
-			}
-		} */
-		
 		//Five - I got five on it.
 		for ( int i=0; i<dealtLetters.size(); i++ ) {
 			for ( int j=i+1; j<dealtLetters.size(); j++ ) {
 				String newWordString = "";
 				for ( int k=0; k<dealtLetters.size(); k++ ) {
 					if ( k != i && k != j ) {
-						newWordString.concat( dealtLetters.get(j).getLetter() );
+						newWordString = newWordString.concat( dealtLetters.get(k).getLetter() );
 					}
 				}
 				combinations.add( new Word( newWordString, alphabet ) );
@@ -118,8 +100,8 @@ public class Player {
 		for ( int i=0; i<dealtLetters.size(); i++ ) {
 			String newWordString = "";
 			for ( int j=0; j<dealtLetters.size(); j++ ) {
-				if ( i != j ) {
-					newWordString.concat( dealtLetters.get(j).getLetter() );
+				if ( j != i ) {
+					newWordString = newWordString.concat( dealtLetters.get(j).getLetter() );
 				}
 			}
 			combinations.add( new Word( newWordString, alphabet ) );
@@ -134,16 +116,17 @@ public class Player {
 				+ dealtLetters.get(5).getLetter()
 				+ dealtLetters.get(6).getLetter(), alphabet ) );
 		
+		//sort the combos in descending order.
 		Collections.sort( combinations );
 		Collections.reverse( combinations );
 		
-		System.out.println( "----------Comobos Here-----------" );
-		for ( Word combo : combinations ) {
-			System.out.println( combo.getWordString() );
+		System.out.println( "----------Combos Here-----------" );
+		
+		for ( int i=0; i<combinations.size(); i++ ) {
+			System.out.println( i + ", " + combinations.get(i).getWordString() );
 		}
 		
 		System.out.println( "Combinations size = " + combinations.size() );
-		
 	}
 	
 	public void findBestWordI() {
