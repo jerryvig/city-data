@@ -18,7 +18,7 @@ public class WWF {
 	private static final HashMap<String,Letter> alphabet = new HashMap<String,Letter>();
 	private static final ArrayList<Word> dictionary = new ArrayList<Word>();
 	
-	private static Integer lastDealtIndex = 0;
+	private static int lastDealtIndex = 0;
 	
 	public static void setAlphabet() {
 		alphabet.put("a",new Letter("a",9,1));				
@@ -47,7 +47,7 @@ public class WWF {
 		alphabet.put("x",new Letter("x",1,8));
 		alphabet.put("y",new Letter("y",2,3));
 		alphabet.put("z",new Letter("z",1,10));
-		alphabet.put("_",new Letter("",2,0));
+		alphabet.put("_",new Letter("_",2,0));
 	}
 	
 	public static void printAlphabet() {
@@ -100,7 +100,7 @@ public class WWF {
 		BufferedReader reader = Files.newBufferedReader(path, Charset.forName("UTF-8"));
 		String line;
 		while ( (line = reader.readLine()) != null ) {
-			dictionary.add( new Word( line.trim(), alphabet ) );
+			dictionary.add( new Word( line.trim() ) );
 		}
 		
 		reader.close();
@@ -118,6 +118,26 @@ public class WWF {
 		}
 	}
 	
+	public static int getLastDealtIndex() {
+		return lastDealtIndex;
+	}
+	
+	public static void incrementLastDealtIndex() {
+		lastDealtIndex++;
+	}
+	
+	public static ArrayList<Letter> getLetterDeck() {
+		return letterDeck;
+	}
+	
+	public static HashMap<String,Letter> getAlphabet() {
+		return alphabet;
+	}
+	
+	public static ArrayList<Word> getDictionary() {
+		return dictionary;
+	}
+	
 	/**
 	 * @param args
 	 */
@@ -130,7 +150,7 @@ public class WWF {
 		
 		shuffleLetterDeck();
 		
-		// printLetterDeck();
+		printLetterDeck();
 		
 		try {
 			loadDictionary();
@@ -146,18 +166,18 @@ public class WWF {
 			word.sortLetters();
 		}
 		
-		Player p1 = new Player("TessMunster", letterDeck, alphabet, dictionary );
-		p1.dealLetters(lastDealtIndex);
+		Player p1 = new Player("TessMunster" );
+		p1.dealLetters();
 		p1.printLetters();
 		//p1.findBestWordI();
-		p1.generateCombinations();
+		//p1.generateCombinations();
 		
 		long endTime = System.currentTimeMillis();
 		System.out.println( "Time = " + Long.toString(endTime-startTime) + " ms" );
 		
-		// Player p2 = new Player("Fluvia");
-		// p2.dealLetters();
-		// p2.printLetters();
+		Player p2 = new Player("FluviaLacerda");
+		p2.dealLetters();
+		p2.printLetters();
 	}
 	
 }

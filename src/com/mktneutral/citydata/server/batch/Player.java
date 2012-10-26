@@ -2,24 +2,17 @@ package com.mktneutral.citydata.server.batch;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 public class Player {
 	private ArrayList<Letter> dealtLetters = new ArrayList<Letter>();
-	private ArrayList<Letter> letterDeck;
-	private HashMap<String,Letter> alphabet;
-	private ArrayList<Word> dictionary;
 	private ArrayList<Word> combinations = new ArrayList<Word>();
 	
 	private static final int LETTER_COUNT = 7;
 	private int score = 0;
 	private String name;
 	
-	public Player( String name, ArrayList<Letter> letterDeck, HashMap<String,Letter> alphabet, ArrayList<Word> dictionary ) {
+	public Player( String name ) {
 		this.name = name;
-		this.letterDeck = letterDeck;
-		this.alphabet = alphabet;
-		this.dictionary = dictionary;
 	}
 	
 	public String getName() {
@@ -30,10 +23,10 @@ public class Player {
 		return this.score;
 	}
 	
-	public void dealLetters( Integer lastDealtIndex ) {
+	public void dealLetters() {
 		for ( int i=0; i<LETTER_COUNT; i++ ) {
-			dealtLetters.add( letterDeck.get(lastDealtIndex) );
-			lastDealtIndex++;
+			dealtLetters.add( WWF.getLetterDeck().get(WWF.getLastDealtIndex()) );
+			WWF.incrementLastDealtIndex();
 		}
 		
 		Collections.sort(dealtLetters);
@@ -46,25 +39,25 @@ public class Player {
 	
 	public void generateCombinations() {
 		//This can work for seven letters in the dealtLetters hand.
-		//One and two
+		//One, two, three, and four
 		for ( int i=0; i<dealtLetters.size(); i++ ) {
 			
-			combinations.add( new Word( dealtLetters.get(i).getLetter(), alphabet ) );
+			combinations.add( new Word( dealtLetters.get(i).getLetter() ) );
 			
 			for ( int j=i+1; j<dealtLetters.size(); j++ ) {
 				combinations.add( new Word( dealtLetters.get(i).getLetter() 
-							+ dealtLetters.get(j).getLetter(), alphabet ) );
+							+ dealtLetters.get(j).getLetter() ) );
 				
 				for ( int k=j+1; k<dealtLetters.size(); k++ ) {
 					combinations.add( new Word( dealtLetters.get(i).getLetter() 
 							+ dealtLetters.get(j).getLetter() 
-							+ dealtLetters.get(k).getLetter(), alphabet ) );
+							+ dealtLetters.get(k).getLetter() ) );
 					
 					for ( int l=k+1; l<dealtLetters.size(); l++ ) {
 						combinations.add( new Word( dealtLetters.get(i).getLetter() 
 								+ dealtLetters.get(j).getLetter() 
 								+ dealtLetters.get(k).getLetter() 
-								+ dealtLetters.get(l).getLetter(), alphabet ) );
+								+ dealtLetters.get(l).getLetter() ) );
 					}
 				}
 			}
@@ -72,6 +65,7 @@ public class Player {
 		
 		//Five - I got five on it.
 		for ( int i=0; i<dealtLetters.size(); i++ ) {
+			//Five is here
 			for ( int j=i+1; j<dealtLetters.size(); j++ ) {
 				String newWordString = "";
 				for ( int k=0; k<dealtLetters.size(); k++ ) {
@@ -79,19 +73,17 @@ public class Player {
 						newWordString = newWordString.concat( dealtLetters.get(k).getLetter() );
 					}
 				}
-				combinations.add( new Word( newWordString, alphabet ) );
+				combinations.add( new Word( newWordString ) );
 			}
-		}
-		
-		//Six 
-		for ( int i=0; i<dealtLetters.size(); i++ ) {
+			
+			//Six is here
 			String newWordString = "";
 			for ( int j=0; j<dealtLetters.size(); j++ ) {
 				if ( j != i ) {
 					newWordString = newWordString.concat( dealtLetters.get(j).getLetter() );
 				}
 			}
-			combinations.add( new Word( newWordString, alphabet ) );
+			combinations.add( new Word( newWordString ) );
 		}
 		
 		//Seven 
@@ -101,7 +93,7 @@ public class Player {
 				+ dealtLetters.get(3).getLetter() 
 				+ dealtLetters.get(4).getLetter()
 				+ dealtLetters.get(5).getLetter()
-				+ dealtLetters.get(6).getLetter(), alphabet ) );
+				+ dealtLetters.get(6).getLetter() ) );
 		
 		//sort the combos in descending order.
 		Collections.sort( combinations );
@@ -118,7 +110,7 @@ public class Player {
 	
 	public void findBestWordI() {
 		//algorithm to find the best acceptable word in the dictionary from a given dealt letter hand.
-		for ( Word word : dictionary ) {
+		for ( Word word : WWF.getDictionary() ) {
 			
 			String wordString = word.getWordString();
 			// System.out.println( "checking " + wordString );
@@ -161,6 +153,6 @@ public class Player {
 	}
 	
 	public void findBestWordII() {
-		
+		//code to find best word based on generated combos.
 	}
 }

@@ -2,17 +2,13 @@ package com.mktneutral.citydata.server.batch;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
 public class Word implements Comparable<Word> {
-	HashMap<String,Letter> alphabet;
-	
 	private String word;
 	private int wordScore;
 	
-	public Word( String word, HashMap<String,Letter> alphabet ) {
+	public Word( String word ) {
 		this.word = word;
-		this.alphabet = alphabet;
 		this.scoreWord();
 	}
 
@@ -28,7 +24,7 @@ public class Word implements Comparable<Word> {
 		//implement word scoring scheme
 		this.wordScore = 0;
 		for ( int i=0; i<word.length(); i++ ) {
-			Letter letter = alphabet.get( word.substring(i,i+1) );
+			Letter letter = WWF.getAlphabet().get( word.substring(i,i+1) );
 			this.wordScore += letter.getScoreValue();
 		}
 	}
