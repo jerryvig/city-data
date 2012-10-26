@@ -2,6 +2,7 @@ package com.mktneutral.citydata.server.batch;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class Player {
 	private ArrayList<Letter> dealtLetters = new ArrayList<Letter>();
@@ -99,13 +100,16 @@ public class Player {
 		Collections.sort( combinations );
 		Collections.reverse( combinations );
 		
+		/*
 		System.out.println( "----------Combos Here-----------" );
 		
 		for ( int i=0; i<combinations.size(); i++ ) {
-			System.out.println( i + ", " + combinations.get(i).getWordString() );
+			// System.out.println( i + ", " + combinations.get(i).getWordString() );
 		}
+		*/
 		
 		System.out.println( "Combinations size = " + combinations.size() );
+		 
 	}
 	
 	public void findBestWordI() {
@@ -154,5 +158,13 @@ public class Player {
 	
 	public void findBestWordII() {
 		//code to find best word based on generated combos.
+		HashMap<String,Integer> sortedWords = WWF.getSortedWords();
+		
+		for ( Word word : combinations) {
+			if ( sortedWords.get( word.getWordString() ) != null ) {
+				System.out.println( "word = " + word.getWordString() +", score = " + WWF.getSortedWords().get( word.getWordString() ) );
+				return;
+			}
+		}
 	}
 }

@@ -18,6 +18,8 @@ public class WWF {
 	private static final HashMap<String,Letter> alphabet = new HashMap<String,Letter>();
 	private static final ArrayList<Word> dictionary = new ArrayList<Word>();
 	
+	private static final HashMap<String,Integer> sortedWords = new HashMap<String,Integer>();
+	
 	private static int lastDealtIndex = 0;
 	
 	public static void setAlphabet() {
@@ -138,6 +140,14 @@ public class WWF {
 		return dictionary;
 	}
 	
+	public static void addSortedWord( String sortedWord, int score ) {
+		sortedWords.put(sortedWord, score);
+	}
+	
+	public static HashMap<String,Integer> getSortedWords() {
+		return sortedWords;
+	}
+	
 	/**
 	 * @param args
 	 */
@@ -150,7 +160,7 @@ public class WWF {
 		
 		shuffleLetterDeck();
 		
-		printLetterDeck();
+		// printLetterDeck();
 		
 		try {
 			loadDictionary();
@@ -163,21 +173,27 @@ public class WWF {
 		// printDictionary();
 		
 		for ( Word word : dictionary ) {
-			word.sortLetters();
+			addSortedWord( word.getSortedLetters(), word.getWordScore() );
 		}
+		
+		System.out.println( "sortedWords Size = " + sortedWords.size() );
+		System.out.println( "dictionary size = " + dictionary.size() );
 		
 		Player p1 = new Player("TessMunster" );
 		p1.dealLetters();
 		p1.printLetters();
-		//p1.findBestWordI();
-		//p1.generateCombinations();
-		
-		long endTime = System.currentTimeMillis();
-		System.out.println( "Time = " + Long.toString(endTime-startTime) + " ms" );
+		p1.generateCombinations();
+		p1.findBestWordII();
 		
 		Player p2 = new Player("FluviaLacerda");
 		p2.dealLetters();
 		p2.printLetters();
+		p2.generateCombinations();
+		p2.findBestWordII();
+		
+		long endTime = System.currentTimeMillis();
+		System.out.println( "Time = " + Long.toString(endTime-startTime) + " ms" );
+		
 	}
 	
 }

@@ -6,6 +6,7 @@ import java.util.Collections;
 public class Word implements Comparable<Word> {
 	private String word;
 	private int wordScore;
+	String sortedLettersWord = "";
 	
 	public Word( String word ) {
 		this.word = word;
@@ -29,22 +30,26 @@ public class Word implements Comparable<Word> {
 		}
 	}
 	
-	public void sortLetters() {
+	public String getSortedLetters() {
 		/*
 		 * need to rewrite here to make it work.
 		*/
-		char[] characters = this.word.toCharArray();
 		ArrayList<String> sortedLetters = new ArrayList<String>();
+		char[] characters = this.word.toCharArray();
 		
 		for ( char character : characters ) {
-			sortedLetters.add( new String(new StringBuilder(character)) );
+			char[] charArray = { character };
+			sortedLetters.add( new String(charArray) );
 		}
 		
 		Collections.sort( sortedLetters );
 		
-		/* for ( String letter : sortedLetters ) {
-			System.out.println( letter );
-		} */
+		// System.out.println( "word = " + word );
+		for ( String letter : sortedLetters ) {
+			sortedLettersWord = sortedLettersWord.concat(letter);
+		}
+		
+		return sortedLettersWord;
 	}
 	
 	@Override
