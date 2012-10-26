@@ -46,33 +46,20 @@ public class Player {
 	
 	public void generateCombinations() {
 		//This can work for seven letters in the dealtLetters hand.
-		//One
+		//One and two
 		for ( int i=0; i<dealtLetters.size(); i++ ) {
+			
 			combinations.add( new Word( dealtLetters.get(i).getLetter(), alphabet ) );
-		}
-		
-		//Two
-		for ( int i=0; i<dealtLetters.size(); i++ ) {
+			
 			for ( int j=i+1; j<dealtLetters.size(); j++ ) {
-				combinations.add( new Word( dealtLetters.get(i).getLetter() + dealtLetters.get(j).getLetter(), alphabet ) );
-			}
-		}
-		
-		//Three
-		for ( int i=0; i<dealtLetters.size(); i++ ) {
-			for ( int j=i+1; j<dealtLetters.size(); j++ ) {
+				combinations.add( new Word( dealtLetters.get(i).getLetter() 
+							+ dealtLetters.get(j).getLetter(), alphabet ) );
+				
 				for ( int k=j+1; k<dealtLetters.size(); k++ ) {
 					combinations.add( new Word( dealtLetters.get(i).getLetter() 
 							+ dealtLetters.get(j).getLetter() 
 							+ dealtLetters.get(k).getLetter(), alphabet ) );
-				}
-			}
-		}
-		
-		//Four
-		for ( int i=0; i<dealtLetters.size(); i++ ) {
-			for ( int j=i+1; j<dealtLetters.size(); j++ ) {
-				for ( int k=j+1; k<dealtLetters.size(); k++ ) {
+					
 					for ( int l=k+1; l<dealtLetters.size(); l++ ) {
 						combinations.add( new Word( dealtLetters.get(i).getLetter() 
 								+ dealtLetters.get(j).getLetter() 
