@@ -38,6 +38,24 @@ public class Player {
 			System.out.println( letter.getLetter() );
 	}
 	
+	public void incrementScore( int bestWordScore ) {
+		this.score += bestWordScore;
+	}
+	
+	public void removeFromDealtLetters( String wordToRemove ) {
+		char[] chars = wordToRemove.toCharArray();
+		
+		for ( char character : chars ) {
+			char[] charArray = { character };
+			String letterToRemove = new String( charArray );
+			for ( int i=0; i<dealtLetters.size(); i++ ) {
+				if ( letterToRemove.equals(dealtLetters.get(i)) ) {
+					dealtLetters.remove(i);
+				}
+			}
+		}
+	}
+	
 	public void generateCombinations() {
 		//This can work for seven letters in the dealtLetters hand.
 		//One, two, three, and four
@@ -158,11 +176,16 @@ public class Player {
 	
 	public void findBestWordII() {
 		//code to find best word based on generated combos.
-		HashMap<String,Integer> sortedWords = WWF.getSortedWords();
+		HashMap<String,Word> sortedWords = WWF.getSortedWords();
 		
-		for ( Word word : combinations) {
-			if ( sortedWords.get( word.getWordString() ) != null ) {
-				System.out.println( "word = " + word.getWordString() +", score = " + WWF.getSortedWords().get( word.getWordString() ) );
+		for ( Word combo : combinations) {
+			if ( sortedWords.get( combo.getWordString() ) != null ) {
+				Word bestWord = WWF.getSortedWords().get( combo.getWordString() );
+				System.out.println( "best word = " + bestWord.getWordString() +", score = " + bestWord.getWordScore() );
+				
+				incrementScore( bestWord.getWordScore() );
+				removeFromDealtLetters( combo.getWordString() );
+				
 				return;
 			}
 		}

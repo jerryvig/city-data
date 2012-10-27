@@ -18,7 +18,7 @@ public class WWF {
 	private static final HashMap<String,Letter> alphabet = new HashMap<String,Letter>();
 	private static final ArrayList<Word> dictionary = new ArrayList<Word>();
 	
-	private static final HashMap<String,Integer> sortedWords = new HashMap<String,Integer>();
+	private static final HashMap<String,Word> sortedWords = new HashMap<String,Word>();
 	
 	private static int lastDealtIndex = 0;
 	
@@ -140,11 +140,11 @@ public class WWF {
 		return dictionary;
 	}
 	
-	public static void addSortedWord( String sortedWord, int score ) {
-		sortedWords.put(sortedWord, score);
+	public static void addSortedWord( String sortedWord, Word word ) {
+		sortedWords.put(sortedWord, word);
 	}
 	
-	public static HashMap<String,Integer> getSortedWords() {
+	public static HashMap<String,Word> getSortedWords() {
 		return sortedWords;
 	}
 	
@@ -173,7 +173,7 @@ public class WWF {
 		// printDictionary();
 		
 		for ( Word word : dictionary ) {
-			addSortedWord( word.getSortedLetters(), word.getWordScore() );
+			addSortedWord( word.getSortedLetters(), word );
 		}
 		
 		System.out.println( "sortedWords Size = " + sortedWords.size() );
@@ -185,11 +185,16 @@ public class WWF {
 		p1.generateCombinations();
 		p1.findBestWordII();
 		
+		//p1.findBestWordI();
+		//startTime = System.currentTimeMillis();
+		
 		Player p2 = new Player("FluviaLacerda");
 		p2.dealLetters();
 		p2.printLetters();
 		p2.generateCombinations();
 		p2.findBestWordII();
+		
+		//p2.findBestWordI();
 		
 		long endTime = System.currentTimeMillis();
 		System.out.println( "Time = " + Long.toString(endTime-startTime) + " ms" );
