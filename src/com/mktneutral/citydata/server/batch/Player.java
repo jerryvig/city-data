@@ -91,6 +91,7 @@ public class Player {
 		}
 		
 		//Five - I got five on it.
+		String sevenLetterWord = "";
 		for ( int i=0; i<dealtLetters.size(); i++ ) {
 			//Five is here
 			for ( int j=i+1; j<dealtLetters.size(); j++ ) {
@@ -111,16 +112,12 @@ public class Player {
 				}
 			}
 			combinations.add( new Word( newWordString ) );
+			
+			sevenLetterWord = sevenLetterWord.concat( dealtLetters.get(i).getLetter() );
 		}
 		
 		//Seven 
-		combinations.add( new Word( dealtLetters.get(0).getLetter() 
-				+ dealtLetters.get(1).getLetter() 
-				+ dealtLetters.get(2).getLetter() 
-				+ dealtLetters.get(3).getLetter() 
-				+ dealtLetters.get(4).getLetter()
-				+ dealtLetters.get(5).getLetter()
-				+ dealtLetters.get(6).getLetter() ) );
+		combinations.add( new Word( sevenLetterWord ) );
 		
 		//sort the combos in descending order.
 		Collections.sort( combinations );
