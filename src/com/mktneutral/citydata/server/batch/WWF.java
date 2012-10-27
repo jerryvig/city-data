@@ -127,11 +127,12 @@ public class WWF {
 	}
 	
 	public static void incrementLastDealtIndex() {
-		lastDealtIndex++;
-		
-		if ( lastDealtIndex >= letterDeck.size() ) {
-			System.out.println( "ALL LETTERS DEALT" );
-		}
+		//if ( lastDealtIndex < letterDeck.size() ) {
+			lastDealtIndex++;
+		//}
+		/* else {
+			System.out.println( "ALL LETTERS DEALT -- GAME ENDS HERE" );
+		} */
 	}
 	
 	public static ArrayList<Letter> getLetterDeck() {

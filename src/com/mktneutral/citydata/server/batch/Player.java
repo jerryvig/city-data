@@ -25,13 +25,16 @@ public class Player {
 	}
 	
 	public void dealLetters() {
-		for ( int i=dealtLetters.size(); i<LETTER_COUNT; i++ ) {
-			dealtLetters.add( WWF.getLetterDeck().get(WWF.getLastDealtIndex()) );
-			System.out.println( "Dealt letter = " + WWF.getLetterDeck().get(WWF.getLastDealtIndex()).getLetter() );
-			WWF.incrementLastDealtIndex();
-		}
+		System.out.println( "LETTER DECK SIZE = " + WWF.getLetterDeck().size() );
 		
-		Collections.sort(dealtLetters);
+			for ( int i=dealtLetters.size(); i<LETTER_COUNT; i++ ) {
+				if ( WWF.getLastDealtIndex() < WWF.getLetterDeck().size() ) {
+					dealtLetters.add( WWF.getLetterDeck().get(WWF.getLastDealtIndex()) );
+					System.out.println( "Dealt letter = " + WWF.getLetterDeck().get(WWF.getLastDealtIndex()).getLetter() );
+					WWF.incrementLastDealtIndex();
+				}
+			}
+			Collections.sort(dealtLetters);
 	}
 	
 	public void printLetters() {
