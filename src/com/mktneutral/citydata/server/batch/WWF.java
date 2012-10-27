@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
+import static java.lang.System.out;
+
 public class WWF {
 	private static final ArrayList<Letter> letterDeck = new ArrayList<Letter>();
 	private static final HashMap<String,Letter> alphabet = new HashMap<String,Letter>();
@@ -58,7 +60,7 @@ public class WWF {
 		while ( iter.hasNext() ) {
 			Map.Entry pair = (Map.Entry) iter.next();
 			Letter letter = (Letter) pair.getValue();
-			System.out.println( letter.getLetter() + ", " + letter.getFrequency() + ", " + letter.getScoreValue() );
+			out.println( letter.getLetter() + ", " + letter.getFrequency() + ", " + letter.getScoreValue() );
 		}
 	}
 	
@@ -81,10 +83,10 @@ public class WWF {
 	
 	public static void printLetterDeck() {
 		for ( Letter letter : letterDeck ) {
-			System.out.println( letter.getLetter() );
+			out.println( letter.getLetter() );
 		}
 		
-		System.out.println( "Letter Deck size = " + letterDeck.size() );
+		out.println( "Letter Deck size = " + letterDeck.size() );
 	}
 	
 	public static void loadDictionary() throws IOException {
@@ -116,7 +118,7 @@ public class WWF {
 	
 	public static void printDictionary() {
 		for ( Word word : dictionary ) {
-			System.out.println( word.getWordString() + ", " + word.getWordScore() );
+			out.println( word.getWordString() + ", " + word.getWordScore() );
 		}
 	}
 	
@@ -126,6 +128,10 @@ public class WWF {
 	
 	public static void incrementLastDealtIndex() {
 		lastDealtIndex++;
+		
+		if ( lastDealtIndex >= letterDeck.size() ) {
+			System.out.println( "ALL LETTERS DEALT" );
+		}
 	}
 	
 	public static ArrayList<Letter> getLetterDeck() {
@@ -176,29 +182,38 @@ public class WWF {
 			addSortedWord( word.getSortedLetters(), word );
 		}
 		
-		System.out.println( "sortedWords Size = " + sortedWords.size() );
-		System.out.println( "dictionary size = " + dictionary.size() );
+		out.println( "sortedWords Size = " + sortedWords.size() );
+		out.println( "dictionary size = " + dictionary.size() );
 		
-		Player p1 = new Player("TessMunster" );
-		p1.dealLetters();
-		p1.printLetters();
-		p1.generateCombinations();
-		p1.findBestWordII();
+		//Only two players in Zynga version of the game.
+		Player player1 = new Player("TessMunster");
+		Player player2 = new Player("FluviaLacerda");
+		//Player player3 = new Player("DeniseBidot");
 		
-		//p1.findBestWordI();
-		//startTime = System.currentTimeMillis();
-		
-		Player p2 = new Player("FluviaLacerda");
-		p2.dealLetters();
-		p2.printLetters();
-		p2.generateCombinations();
-		p2.findBestWordII();
-		
-		//p2.findBestWordI();
+		while ( lastDealtIndex < letterDeck.size() ) {
+			out.println( "---PLAYER 1 ---");
+			player1.dealLetters();
+			player1.printLetters();
+			player1.generateCombinations();
+			player1.findBestWordII();
+			out.println( "SCORE = " + player1.getScore() );
+			
+			out.println("---PLAYER 2----");
+			player2.dealLetters();
+			player2.printLetters();
+			player2.generateCombinations();
+			player2.findBestWordII();
+			out.println( "SCORE = " + player2.getScore() );
+			
+			//out.println("-----PLAYER 3-----");
+			//player3.dealLetters();
+			//player3.printLetters();
+			//player3.generateCombinations();
+			//player3.findBestWordII();
+		}
 		
 		long endTime = System.currentTimeMillis();
-		System.out.println( "Time = " + Long.toString(endTime-startTime) + " ms" );
-		
+		out.println( "Time = " + Long.toString(endTime-startTime) + " ms" );
 	}
 	
 }

@@ -25,8 +25,9 @@ public class Player {
 	}
 	
 	public void dealLetters() {
-		for ( int i=0; i<LETTER_COUNT; i++ ) {
+		for ( int i=dealtLetters.size(); i<LETTER_COUNT; i++ ) {
 			dealtLetters.add( WWF.getLetterDeck().get(WWF.getLastDealtIndex()) );
+			System.out.println( "Dealt letter = " + WWF.getLetterDeck().get(WWF.getLastDealtIndex()).getLetter() );
 			WWF.incrementLastDealtIndex();
 		}
 		
@@ -49,14 +50,18 @@ public class Player {
 			char[] charArray = { character };
 			String letterToRemove = new String( charArray );
 			for ( int i=0; i<dealtLetters.size(); i++ ) {
-				if ( letterToRemove.equals(dealtLetters.get(i)) ) {
+				if ( letterToRemove.equals(dealtLetters.get(i).getLetter()) ) {
 					dealtLetters.remove(i);
+					System.out.println( "WE REMOVED A LETTER - " + letterToRemove + " , " + dealtLetters.size() );
+					break;
 				}
 			}
 		}
 	}
 	
 	public void generateCombinations() {
+		combinations.clear();
+
 		//This can work for seven letters in the dealtLetters hand.
 		//One, two, three, and four
 		for ( int i=0; i<dealtLetters.size(); i++ ) {
@@ -184,7 +189,7 @@ public class Player {
 				System.out.println( "best word = " + bestWord.getWordString() +", score = " + bestWord.getWordScore() );
 				
 				incrementScore( bestWord.getWordScore() );
-				removeFromDealtLetters( combo.getWordString() );
+				removeFromDealtLetters( bestWord.getWordString() );
 				
 				return;
 			}
