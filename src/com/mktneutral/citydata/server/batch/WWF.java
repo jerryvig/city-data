@@ -131,7 +131,7 @@ public class WWF {
 			lastDealtIndex++;
 		//}
 		/* else {
-			System.out.println( "ALL LETTERS DEALT -- GAME ENDS HERE" );
+			.println( "ALL LETTERS DEALT -- GAME ENDS HERE" );
 		} */
 	}
 	

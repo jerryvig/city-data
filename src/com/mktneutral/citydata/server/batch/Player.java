@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
+import static java.lang.System.out;
+
 public class Player {
 	private ArrayList<Letter> dealtLetters = new ArrayList<Letter>();
 	private ArrayList<Word> combinations = new ArrayList<Word>();
@@ -25,13 +27,16 @@ public class Player {
 	}
 	
 	public void dealLetters() {
-		System.out.println( "LETTER DECK SIZE = " + WWF.getLetterDeck().size() );
+		out.println( "LETTER DECK SIZE = " + WWF.getLetterDeck().size() );
 		
 			for ( int i=dealtLetters.size(); i<LETTER_COUNT; i++ ) {
 				if ( WWF.getLastDealtIndex() < WWF.getLetterDeck().size() ) {
 					dealtLetters.add( WWF.getLetterDeck().get(WWF.getLastDealtIndex()) );
-					System.out.println( "Dealt letter = " + WWF.getLetterDeck().get(WWF.getLastDealtIndex()).getLetter() );
+					out.println( "Dealt letter = " + WWF.getLetterDeck().get(WWF.getLastDealtIndex()).getLetter() );
 					WWF.incrementLastDealtIndex();
+				} 
+				else {
+					out.println( "ALL LETTERS DEALT -- GAME ENDS HERE" );
 				}
 			}
 			Collections.sort(dealtLetters);
@@ -39,7 +44,7 @@ public class Player {
 	
 	public void printLetters() {
 		for ( Letter letter : dealtLetters ) 
-			System.out.println( letter.getLetter() );
+			out.println( letter.getLetter() );
 	}
 	
 	public void incrementScore( int bestWordScore ) {
@@ -55,7 +60,7 @@ public class Player {
 			for ( int i=0; i<dealtLetters.size(); i++ ) {
 				if ( letterToRemove.equals(dealtLetters.get(i).getLetter()) ) {
 					dealtLetters.remove(i);
-					System.out.println( "WE REMOVED A LETTER - " + letterToRemove + " , " + dealtLetters.size() );
+					out.println( "WE REMOVED A LETTER - " + letterToRemove + " , " + dealtLetters.size() );
 					break;
 				}
 			}
@@ -124,14 +129,14 @@ public class Player {
 		Collections.reverse( combinations );
 		
 		/*
-		System.out.println( "----------Combos Here-----------" );
+		out.println( "----------Combos Here-----------" );
 		
 		for ( int i=0; i<combinations.size(); i++ ) {
-			// System.out.println( i + ", " + combinations.get(i).getWordString() );
+			// out.println( i + ", " + combinations.get(i).getWordString() );
 		}
 		*/
 		
-		System.out.println( "Combinations size = " + combinations.size() );
+		out.println( "Combinations size = " + combinations.size() );
 		 
 	}
 	
@@ -140,7 +145,7 @@ public class Player {
 		for ( Word word : WWF.getDictionary() ) {
 			
 			String wordString = word.getWordString();
-			// System.out.println( "checking " + wordString );
+			// out.println( "checking " + wordString );
 			
 			ArrayList<Letter> dealtCopy = (ArrayList<Letter>) dealtLetters.clone();
 			ArrayList<Boolean> lettersFound = new ArrayList<Boolean>();
@@ -153,13 +158,13 @@ public class Player {
 				String letter = wordString.substring(i,i+1);
 				lettersFound.add( new Boolean(false) );
 				
-				//System.out.println( "next Letter = " + letter );
+				//out.println( "next Letter = " + letter );
 				
 				for ( int j=0; j<dealtCopy.size(); j++ ) {
-					//System.out.println( "dealt copy = " + dealtCopy.get(j) );
+					//out.println( "dealt copy = " + dealtCopy.get(j) );
 					Letter dealtLetter = (Letter) dealtCopy.get(j);
 					if ( dealtLetter.getLetter().equals(letter) ) {
-						// System.out.println( "we have equality" );
+						// out.println( "we have equality" );
 						
 						dealtCopy.remove(j);
 						lettersFound.set(lettersFound.size()-1, new Boolean(true));
@@ -173,7 +178,7 @@ public class Player {
 			}
 			
 			if ( foundIt ) {
-				System.out.println( wordString + ", found it, score = " + word.getWordScore() );
+				out.println( wordString + ", found it, score = " + word.getWordScore() );
 				return;
 			}
 		}
@@ -186,7 +191,8 @@ public class Player {
 		for ( Word combo : combinations) {
 			if ( sortedWords.get( combo.getWordString() ) != null ) {
 				Word bestWord = WWF.getSortedWords().get( combo.getWordString() );
-				System.out.println( "best word = " + bestWord.getWordString() +", score = " + bestWord.getWordScore() );
+				
+				out.println( "best word = " + bestWord.getWordString() +", score = " + bestWord.getWordScore() );
 				
 				incrementScore( bestWord.getWordScore() );
 				removeFromDealtLetters( bestWord.getWordString() );

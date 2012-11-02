@@ -3,6 +3,8 @@ package com.mktneutral.citydata.server.batch;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import static java.lang.System.out;
+
 public class Word implements Comparable<Word> {
 	private String word;
 	private int wordScore;
@@ -44,7 +46,7 @@ public class Word implements Comparable<Word> {
 		
 		Collections.sort( sortedLetters );
 		
-		// System.out.println( "word = " + word );
+		// out.println( "word = " + word );
 		for ( String letter : sortedLetters ) {
 			sortedLettersWord = sortedLettersWord.concat(letter);
 		}
