@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" total="4" passed="4">
+<testng-results skipped="0" failed="0" total="3" passed="3">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="63" started-at="2012-11-02T21:58:52Z" finished-at="2012-11-02T21:58:52Z">
+  <suite name="Default suite" duration-ms="69" started-at="2012-11-02T22:43:19Z" finished-at="2012-11-02T22:43:19Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="63" started-at="2012-11-02T21:58:52Z" finished-at="2012-11-02T21:58:52Z">
-      <class name="com.mktneutral.citydata.test.server.batch.LetterTest">
-        <test-method status="PASS" signature="testCompareTo()[pri:0, instance:com.mktneutral.citydata.test.server.batch.LetterTest@60bffa22]" name="testCompareTo" duration-ms="41" started-at="2012-11-02T14:58:52Z" finished-at="2012-11-02T14:58:52Z">
+    <test name="Default test" duration-ms="69" started-at="2012-11-02T22:43:19Z" finished-at="2012-11-02T22:43:19Z">
+      <class name="com.mktneutral.citydata.test.server.batch.PlayerTest">
+        <test-method status="PASS" signature="testDealLetters()[pri:0, instance:com.mktneutral.citydata.test.server.batch.PlayerTest@60bffa22]" name="testDealLetters" duration-ms="36" started-at="2012-11-02T15:43:19Z" finished-at="2012-11-02T15:43:19Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testCompareTo -->
-        <test-method status="PASS" signature="testGetFrequency()[pri:0, instance:com.mktneutral.citydata.test.server.batch.LetterTest@60bffa22]" name="testGetFrequency" duration-ms="0" started-at="2012-11-02T14:58:52Z" finished-at="2012-11-02T14:58:52Z">
+        </test-method> <!-- testDealLetters -->
+        <test-method status="PASS" signature="testGetName()[pri:0, instance:com.mktneutral.citydata.test.server.batch.PlayerTest@60bffa22]" name="testGetName" duration-ms="1" started-at="2012-11-02T15:43:19Z" finished-at="2012-11-02T15:43:19Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testGetFrequency -->
-        <test-method status="PASS" signature="testGetScoreValue()[pri:0, instance:com.mktneutral.citydata.test.server.batch.LetterTest@60bffa22]" name="testGetScoreValue" duration-ms="0" started-at="2012-11-02T14:58:52Z" finished-at="2012-11-02T14:58:52Z">
+        </test-method> <!-- testGetName -->
+        <test-method status="PASS" signature="testGetScore()[pri:0, instance:com.mktneutral.citydata.test.server.batch.PlayerTest@60bffa22]" name="testGetScore" duration-ms="0" started-at="2012-11-02T15:43:19Z" finished-at="2012-11-02T15:43:19Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- testGetScoreValue -->
-        <test-method status="PASS" signature="testGetLetter()[pri:0, instance:com.mktneutral.citydata.test.server.batch.LetterTest@60bffa22]" name="testGetLetter" duration-ms="0" started-at="2012-11-02T14:58:52Z" finished-at="2012-11-02T14:58:52Z">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- testGetLetter -->
-      </class> <!-- com.mktneutral.citydata.test.server.batch.LetterTest -->
+        </test-method> <!-- testGetScore -->
+      </class> <!-- com.mktneutral.citydata.test.server.batch.PlayerTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
