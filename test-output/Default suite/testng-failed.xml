@@ -3,11 +3,11 @@
 <suite name="Failed suite [Default suite]">
   <test name="Default test(failed)">
     <classes>
-      <class name="com.mktneutral.citydata.test.server.batch.WWFTest">
+      <class name="com.mktneutral.citydata.test.server.batch.WordTest">
         <methods>
-          <include name="testSetAlphabet"/>
+          <include name="testScoreWord"/>
         </methods>
-      </class> <!-- com.mktneutral.citydata.test.server.batch.WWFTest -->
+      </class> <!-- com.mktneutral.citydata.test.server.batch.WordTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
