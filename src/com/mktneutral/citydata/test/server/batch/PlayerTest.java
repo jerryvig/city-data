@@ -19,7 +19,7 @@ public class PlayerTest {
   }
   
   @Test
-  public void testGetScore() {
+  public void testGetScoreAndIncrementScore() {
 	  Player player1 = new Player("RosieMercado");
 	  Assert.assertEquals(player1.getScore(), 0);
 	  
